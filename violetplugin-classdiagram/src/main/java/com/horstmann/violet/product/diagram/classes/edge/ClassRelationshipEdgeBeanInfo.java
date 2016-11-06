@@ -11,11 +11,8 @@ import com.horstmann.violet.product.diagram.common.edge.LabeledLineEdgeBeanInfo;
  */
 public abstract class ClassRelationshipEdgeBeanInfo extends LabeledLineEdgeBeanInfo
 {
-    protected ClassRelationshipEdgeBeanInfo(Class<?> beanClass)
+    protected ClassRelationshipEdgeBeanInfo(final Class<?> beanClass)
     {
         super(beanClass);
-
-        displayLineStyle = false;
-        displayEndArrowhead = false;
     }
 }

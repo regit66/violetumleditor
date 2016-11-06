@@ -10,14 +10,15 @@ import java.util.List;
  * @author Adrian Bobrowski <adrian071993@gmail.com>
  * @date 22.02.2016
  */
-public class ArrowheadEdgeBeanInfo extends LineEdgeBeanInfo
+class ArrowheadEdgeBeanInfo extends LineEdgeBeanInfo
 {
+
     public ArrowheadEdgeBeanInfo()
     {
         super(ArrowheadEdge.class);
     }
 
-    protected ArrowheadEdgeBeanInfo(Class<?> beanClass)
+    ArrowheadEdgeBeanInfo(final Class<?> beanClass)
     {
         super(beanClass);
     }
@@ -25,15 +26,17 @@ public class ArrowheadEdgeBeanInfo extends LineEdgeBeanInfo
     @Override
     protected List<PropertyDescriptor> createPropertyDescriptorList()
     {
-        List<PropertyDescriptor> propertyDescriptorList = super.createPropertyDescriptorList();
+        final List<PropertyDescriptor> propertyDescriptorList = super.createPropertyDescriptorList();
 
-        if(displayStartArrowhead)
+        if (displayStartArrowhead)
         {
-            propertyDescriptorList.add(createPropertyDescriptor(START_ARROWHEAD_VAR_NAME, START_ARROWHEAD_LABEL_KEY,0));
+            propertyDescriptorList
+                    .add(createPropertyDescriptor(START_ARROWHEAD_VAR_NAME, START_ARROWHEAD_LABEL_KEY, START_ARROWHEAD_PRIORITY));
         }
-        if(displayEndArrowhead)
+        if (displayEndArrowhead)
         {
-            propertyDescriptorList.add(createPropertyDescriptor(END_ARROWHEAD_VAR_NAME, END_ARROWHEAD_LABEL_KEY,10));
+            propertyDescriptorList
+                    .add(createPropertyDescriptor(END_ARROWHEAD_VAR_NAME, END_ARROWHEAD_LABEL_KEY, END_ARROWHEAD_PRIORITY));
         }
         return propertyDescriptorList;
     }
@@ -41,8 +44,10 @@ public class ArrowheadEdgeBeanInfo extends LineEdgeBeanInfo
     protected boolean displayStartArrowhead = true;
     protected boolean displayEndArrowhead = true;
 
-    protected static final String START_ARROWHEAD_LABEL_KEY = "arrowhead.start";
-    protected static final String END_ARROWHEAD_LABEL_KEY = "arrowhead.end";
     private static final String START_ARROWHEAD_VAR_NAME = "startArrowheadChoiceList";
     private static final String END_ARROWHEAD_VAR_NAME = "endArrowheadChoiceList";
+    private static final String START_ARROWHEAD_LABEL_KEY = "arrowhead.start";
+    private static final String END_ARROWHEAD_LABEL_KEY = "arrowhead.end";
+    private static final int START_ARROWHEAD_PRIORITY = 0;
+    private static final int END_ARROWHEAD_PRIORITY = 10;
 }

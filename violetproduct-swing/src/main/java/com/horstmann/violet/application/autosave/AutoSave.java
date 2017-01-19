@@ -5,13 +5,10 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.MessageFormat;
 
-import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 import com.horstmann.violet.application.gui.MainFrame;
-import com.horstmann.violet.framework.dialog.DialogFactory;
 import com.horstmann.violet.framework.file.GraphFile;
 import com.horstmann.violet.framework.file.IFile;
 import com.horstmann.violet.framework.file.LocalFile;
@@ -20,9 +17,6 @@ import com.horstmann.violet.framework.file.persistence.IFileReader;
 import com.horstmann.violet.framework.file.persistence.JFileReader;
 import com.horstmann.violet.framework.injection.bean.ManiocFramework.BeanInjector;
 import com.horstmann.violet.framework.injection.bean.ManiocFramework.InjectedBean;
-import com.horstmann.violet.framework.injection.resources.ResourceBundleInjector;
-import com.horstmann.violet.framework.injection.resources.annotation.ResourceBundleBean;
-import com.horstmann.violet.product.diagram.abstracts.IGraph;
 import com.horstmann.violet.framework.file.IGraphFile;
 import com.horstmann.violet.workspace.IWorkspace;
 import com.horstmann.violet.workspace.Workspace;
@@ -31,45 +25,61 @@ import com.horstmann.violet.workspace.Workspace;
  * Violet's auto save
  * 
  * @author Pawel Majka
- * 
+ * @author Marta Mrugalska
  */
 public class AutoSave implements ActionListener {
 
 	private MainFrame mainFrame;
 	private Timer saveTimer;
+	private int saveInterval;
+	private String autoSaveDirectory;
 
-    private final int second = 1000;
-    private final int saveInterval = 60 * second;
-    private final String autoSaveDirectory = System.getProperty("user.home") + File.separator + "VioletUML";
-
+	@InjectedBean
+	private IFilePersistenceService filePersistenceService;
+	
+	/**
+	* Constructor Autosave
+	*  @param mainFrame where is attached this menu
+	*/
 	public AutoSave(MainFrame mainFrame)
 	{
 		BeanInjector.getInjector().inject(this);
-
-		if (mainFrame != null)
-		{
-			this.mainFrame = mainFrame;
-			if (createVioletDirectory())
+		AutosaveSettings settings = new AutosaveSettings();
+		
+		if (settings.isEnableAutosave()) {
+			saveInterval = settings.getAutosaveInterval();
+			autoSaveDirectory = settings.getAutosavePath();
+	
+			if (mainFrame != null)
 			{
-				openAutoSaveProjects();
-				initializeTimer();
+				this.mainFrame = mainFrame;
+				if (createVioletDirectory())
+				{
+					openAutoSaveProjects();
+					initializeTimer();
+				}
 			}
 		}
 	}
 
+	/**
+	 * Create Violet directory
+	 * @return true if path was created
+	*/
 	private boolean createVioletDirectory()
 	{
 		File directory = new File(autoSaveDirectory);
-		if (directory.isDirectory())
+		boolean result = directory.isDirectory();
+		if(!result)
 		{
-			return true;
+			result = directory.mkdir();
 		}
-		else
-		{
-			return directory.mkdir();
-		}
+		return result;
 	}
 
+	/**
+	 * Open autosave project
+	*/
 	private void openAutoSaveProjects()
 	{
 		File directory = new File(autoSaveDirectory);
@@ -87,7 +97,6 @@ public class AutoSave implements ActionListener {
 					InputStream in = readFile.getInputStream();
 					if (in != null)
 					{
-						IGraph graph = this.filePersistenceService.read(in);
 						IGraphFile graphFile = new GraphFile(autoSaveFile);
 					
 						IWorkspace workspace = new Workspace(graphFile);
@@ -104,6 +113,9 @@ public class AutoSave implements ActionListener {
 		}
 	}
 
+	/**
+	 * Initialize timer
+	*/
 	private void initializeTimer()
 	{
 		saveTimer = new Timer(saveInterval, (ActionListener) this);
@@ -111,18 +123,19 @@ public class AutoSave implements ActionListener {
 		saveTimer.start();
 	}
 
+	/**
+	 * Action Performed
+	 *  @param action event
+	*/
 	@Override
 	public void actionPerformed(ActionEvent e) {
-	    for (IWorkspace workspace: mainFrame.getWorkspaceList())
-	    {
-	    	IGraphFile graphFile = workspace.getGraphFile();
-	    	if (graphFile.isSaveRequired())
-	    	{
-	    		graphFile.autoSave();
-	    	}
-	    }
+			for (IWorkspace workspace: mainFrame.getWorkspaceList())
+		{
+			IGraphFile graphFile = workspace.getGraphFile();
+			if (graphFile.isSaveRequired())
+			{
+				graphFile.autoSave();
+			}
+		}
 	}
-
-	@InjectedBean
-	private IFilePersistenceService filePersistenceService;
 }

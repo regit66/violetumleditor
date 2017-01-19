@@ -25,10 +25,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.JDialog;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import com.horstmann.violet.application.gui.MainFrame;
+import com.horstmann.violet.application.gui.SettingsDialog;
 import com.horstmann.violet.framework.injection.resources.ResourceBundleInjector;
 import com.horstmann.violet.framework.injection.resources.annotation.ResourceBundleBean;
 import com.horstmann.violet.workspace.editorpart.IEditorPart;
@@ -43,241 +45,257 @@ import com.horstmann.violet.workspace.editorpart.behavior.UndoRedoCompoundBehavi
  * Edit menu
  * 
  * @author Alexandre de Pellegrin
- * 
+ * @author Marta Mrugalska
  */
 @ResourceBundleBean(resourceReference = MenuFactory.class)
 public class EditMenu extends JMenu
 {
+	private static final long serialVersionUID = 1L;
+	
+	/** Application frame */
+	private MainFrame mainFrame;
 
-    /**
-     * Default constructor
-     * 
-     * @param mainFrame where is attached this menu
-     * @param factory for accessing to external resources
-     */
-    @ResourceBundleBean(key = "edit")
-    public EditMenu(final MainFrame mainFrame)
-    {
-        ResourceBundleInjector.getInjector().inject(this);
-        this.mainFrame = mainFrame;
-        this.createMenu();
-    }
+	@ResourceBundleBean(key = "edit.undo")
+	private JMenuItem undo;
 
-    /**
-     * Initializes menu
-     */
-    private void createMenu()
-    {
-        undo.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent event)
-            {
-                if (isThereAnyWorkspaceDisplayed()) {
-                    IEditorPart activeEditorPart = getActiveEditorPart();
-                    IEditorPartBehaviorManager behaviorManager = activeEditorPart.getBehaviorManager();
-                    List<UndoRedoCompoundBehavior> found = behaviorManager.getBehaviors(UndoRedoCompoundBehavior.class);
-                    if (found.size() != 1) {
-                        return;
-                    }
-                    found.get(0).undo();
-                }
-            }
-        });
-        this.add(undo);
+	@ResourceBundleBean(key = "edit.redo")
+	private JMenuItem redo;
 
-        redo.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent event)
-            {
-                if (isThereAnyWorkspaceDisplayed()) {
-                    IEditorPart activeEditorPart = getActiveEditorPart();
-                    IEditorPartBehaviorManager behaviorManager = activeEditorPart.getBehaviorManager();
-                    List<UndoRedoCompoundBehavior> found = behaviorManager.getBehaviors(UndoRedoCompoundBehavior.class);
-                    if (found.size() != 1) {
-                        return;
-                    }
-                    found.get(0).redo();
-                }
-            }
-        });
-        this.add(redo);
+	@ResourceBundleBean(key = "edit.properties")
+	private JMenuItem properties;
 
-        properties.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent event)
-            {
-                if (isThereAnyWorkspaceDisplayed()) {
-                    IEditorPart activeEditorPart = getActiveEditorPart();
-                    IEditorPartBehaviorManager behaviorManager = activeEditorPart.getBehaviorManager();
-                    List<EditSelectedBehavior> found = behaviorManager.getBehaviors(EditSelectedBehavior.class);
-                    if (found.size() != 1) {
-                        return;
-                    }
-                    found.get(0).editSelected();
-                }
-            }
-        });
-        this.add(properties);
+	@ResourceBundleBean(key = "edit.cut")
+	private JMenuItem cut;
 
-        cut.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent event)
-            {
-                if (isThereAnyWorkspaceDisplayed()) {
-                    IEditorPart activeEditorPart = getActiveEditorPart();
-                    IEditorPartBehaviorManager behaviorManager = activeEditorPart.getBehaviorManager();
-                    List<CutCopyPasteBehavior> found = behaviorManager.getBehaviors(CutCopyPasteBehavior.class);
-                    if (found.size() != 1) {
-                        return;
-                    }
-                    found.get(0).cut();
-                }
-            }
-        });
-        this.add(cut);
+	@ResourceBundleBean(key = "edit.copy")
+	private JMenuItem copy;
 
-        copy.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent event)
-            {
-                if (isThereAnyWorkspaceDisplayed()) {
-                    IEditorPart activeEditorPart = getActiveEditorPart();
-                    IEditorPartBehaviorManager behaviorManager = activeEditorPart.getBehaviorManager();
-                    List<CutCopyPasteBehavior> found = behaviorManager.getBehaviors(CutCopyPasteBehavior.class);
-                    if (found.size() != 1) {
-                        return;
-                    }
-                    found.get(0).copy();
-                }
-            }
-        });
-        this.add(copy);
+	@ResourceBundleBean(key = "edit.paste")
+	private JMenuItem paste;
 
-        paste.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent event)
-            {
-                if (isThereAnyWorkspaceDisplayed()) {
-                    IEditorPart activeEditorPart = getActiveEditorPart();
-                    IEditorPartBehaviorManager behaviorManager = activeEditorPart.getBehaviorManager();
-                    List<CutCopyPasteBehavior> found = behaviorManager.getBehaviors(CutCopyPasteBehavior.class);
-                    if (found.size() != 1) {
-                        return;
-                    }
-                    found.get(0).paste();
-                }
-            }
-        });
-        this.add(paste);
+	@ResourceBundleBean(key = "edit.delete")
+	private JMenuItem delete;
 
-        delete.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent event)
-            {
-                if (isThereAnyWorkspaceDisplayed()) getActiveEditorPart().removeSelected();
-            }
-        });
-        this.add(delete);
-        
-        selectAll.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent event)
-            {
-                if (isThereAnyWorkspaceDisplayed()) {
-                    IEditorPart activeEditorPart = getActiveEditorPart();
-                    IEditorPartBehaviorManager behaviorManager = activeEditorPart.getBehaviorManager();
-                    List<SelectAllBehavior> found = behaviorManager.getBehaviors(SelectAllBehavior.class);
-                    if (found.size() != 1) {
-                        return;
-                    }
-                    found.get(0).selectAllGraphElements();
-                }
-            }
-        });
-        this.add(selectAll);
+	@ResourceBundleBean(key = "edit.select_all")
+	private JMenuItem selectAll;
 
-        selectNext.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent event)
-            {
-                if (isThereAnyWorkspaceDisplayed()) {
-                    IEditorPart activeEditorPart = getActiveEditorPart();
-                    IEditorPartBehaviorManager behaviorManager = activeEditorPart.getBehaviorManager();
-                    List<SelectByDistanceBehavior> found = behaviorManager.getBehaviors(SelectByDistanceBehavior.class);
-                    if (found.size() != 1) {
-                        return;
-                    }
-                    found.get(0).selectAnotherGraphElement(1);
-                }
-            }
-        });
-        this.add(selectNext);
+	@ResourceBundleBean(key = "edit.select_next")
+	private JMenuItem selectNext;
 
-        selectPrevious.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent event)
-            {
-                if (isThereAnyWorkspaceDisplayed()) {
-                    IEditorPart activeEditorPart = getActiveEditorPart();
-                    IEditorPartBehaviorManager behaviorManager = activeEditorPart.getBehaviorManager();
-                    List<SelectByDistanceBehavior> found = behaviorManager.getBehaviors(SelectByDistanceBehavior.class);
-                    if (found.size() != 1) {
-                        return;
-                    }
-                    found.get(0).selectAnotherGraphElement(-1);
-                }
-            }
-        });
-        this.add(selectPrevious);
+	@ResourceBundleBean(key = "edit.select_previous")
+	private JMenuItem selectPrevious;
+	    
+	@ResourceBundleBean(key = "edit.settings")
+	private JMenuItem settings;
+	/**
+	 * Default constructor
+	 * 
+	 * @param mainFrame where is attached this menu
+	 * @param factory for accessing to external resources
+	*/
+	@ResourceBundleBean(key = "edit")
+	public EditMenu(final MainFrame mainFrame)
+	{
+		ResourceBundleInjector.getInjector().inject(this);
+		this.mainFrame = mainFrame;
+		this.createMenu();
+	}
 
-    }
+	/**
+	 * Initializes menu
+	 */
+	private void createMenu()
+	{
+		undo.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				if (isThereAnyWorkspaceDisplayed()) {
+					IEditorPart activeEditorPart = getActiveEditorPart();
+					IEditorPartBehaviorManager behaviorManager = activeEditorPart.getBehaviorManager();
+					List<UndoRedoCompoundBehavior> found = behaviorManager.getBehaviors(UndoRedoCompoundBehavior.class);
+					if (found.size() != 1) {
+						return;
+					}
+					found.get(0).undo();
+				}
+			}
+		});
+		this.add(undo);
 
-    /**
-     * @return current editor
-     */
-    private IEditorPart getActiveEditorPart()
-    {
-        return this.mainFrame.getActiveWorkspace().getEditorPart();
-    }
+		redo.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				if (isThereAnyWorkspaceDisplayed()) {
+					IEditorPart activeEditorPart = getActiveEditorPart();
+					IEditorPartBehaviorManager behaviorManager = activeEditorPart.getBehaviorManager();
+					List<UndoRedoCompoundBehavior> found = behaviorManager.getBehaviors(UndoRedoCompoundBehavior.class);
+					if (found.size() != 1) {
+						return;
+					}
+					found.get(0).redo();
+				}
+			}
+		});
+		this.add(redo);
 
-    /**
-     * @return true id at least one workspace is reachable
-     */
-    private boolean isThereAnyWorkspaceDisplayed()
-    {
-        return mainFrame.getWorkspaceList().size() > 0;
-    }
-    
-    /** Application frame */
-    private MainFrame mainFrame;
+		properties.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				if (isThereAnyWorkspaceDisplayed()) {
+					IEditorPart activeEditorPart = getActiveEditorPart();
+					IEditorPartBehaviorManager behaviorManager = activeEditorPart.getBehaviorManager();
+					List<EditSelectedBehavior> found = behaviorManager.getBehaviors(EditSelectedBehavior.class);
+					if (found.size() != 1) {
+						return;
+					}
+					found.get(0).editSelected();
+				}
+			}
+		});
+		this.add(properties);
 
-    @ResourceBundleBean(key = "edit.undo")
-    private JMenuItem undo;
+		cut.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				if (isThereAnyWorkspaceDisplayed()) {
+					IEditorPart activeEditorPart = getActiveEditorPart();
+					IEditorPartBehaviorManager behaviorManager = activeEditorPart.getBehaviorManager();
+					List<CutCopyPasteBehavior> found = behaviorManager.getBehaviors(CutCopyPasteBehavior.class);
+					if (found.size() != 1) {
+						return;
+					}
+					found.get(0).cut();
+				}
+			}
+		});
+		this.add(cut);
 
-    @ResourceBundleBean(key = "edit.redo")
-    private JMenuItem redo;
+		copy.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				if (isThereAnyWorkspaceDisplayed()) {
+					IEditorPart activeEditorPart = getActiveEditorPart();
+					IEditorPartBehaviorManager behaviorManager = activeEditorPart.getBehaviorManager();
+					List<CutCopyPasteBehavior> found = behaviorManager.getBehaviors(CutCopyPasteBehavior.class);
+					if (found.size() != 1) {
+						return;
+					}
+					found.get(0).copy();
+				}
+			}
+		});
+	this.add(copy);
 
-    @ResourceBundleBean(key = "edit.properties")
-    private JMenuItem properties;
+		paste.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				if (isThereAnyWorkspaceDisplayed()) {
+					IEditorPart activeEditorPart = getActiveEditorPart();
+					IEditorPartBehaviorManager behaviorManager = activeEditorPart.getBehaviorManager();
+					List<CutCopyPasteBehavior> found = behaviorManager.getBehaviors(CutCopyPasteBehavior.class);
+					if (found.size() != 1) {
+						return;
+					}
+					found.get(0).paste();
+				}
+			}
+		});
+	this.add(paste);
 
-    @ResourceBundleBean(key = "edit.cut")
-    private JMenuItem cut;
+		delete.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				if (isThereAnyWorkspaceDisplayed()) getActiveEditorPart().removeSelected();
+			}
+		});
+		this.add(delete);
 
-    @ResourceBundleBean(key = "edit.copy")
-    private JMenuItem copy;
+		selectAll.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				if (isThereAnyWorkspaceDisplayed()) {
+					IEditorPart activeEditorPart = getActiveEditorPart();
+					IEditorPartBehaviorManager behaviorManager = activeEditorPart.getBehaviorManager();
+					List<SelectAllBehavior> found = behaviorManager.getBehaviors(SelectAllBehavior.class);
+					if (found.size() != 1) {
+						return;
+					}
+					found.get(0).selectAllGraphElements();
+				}
+			}
+		});
+		this.add(selectAll);
 
-    @ResourceBundleBean(key = "edit.paste")
-    private JMenuItem paste;
+		selectNext.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				if (isThereAnyWorkspaceDisplayed()) {
+					IEditorPart activeEditorPart = getActiveEditorPart();
+					IEditorPartBehaviorManager behaviorManager = activeEditorPart.getBehaviorManager();
+					List<SelectByDistanceBehavior> found = behaviorManager.getBehaviors(SelectByDistanceBehavior.class);
+					if (found.size() != 1) {
+						return;
+					}
+					found.get(0).selectAnotherGraphElement(1);
+				}
+			}
+		});
+		this.add(selectNext);
 
-    @ResourceBundleBean(key = "edit.delete")
-    private JMenuItem delete;
+		selectPrevious.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				if (isThereAnyWorkspaceDisplayed()) {
+					IEditorPart activeEditorPart = getActiveEditorPart();
+					IEditorPartBehaviorManager behaviorManager = activeEditorPart.getBehaviorManager();
+					List<SelectByDistanceBehavior> found = behaviorManager.getBehaviors(SelectByDistanceBehavior.class);
+					if (found.size() != 1) {
+						return;
+					}
+					found.get(0).selectAnotherGraphElement(-1);
+				}
+			}
+		});
+		this.add(selectPrevious);
 
-    @ResourceBundleBean(key = "edit.select_all")
-    private JMenuItem selectAll;
+		settings.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				JDialog settingsDialog = new SettingsDialog(mainFrame, true);
+				settingsDialog.setLocationRelativeTo(mainFrame);
+				settingsDialog.setVisible(true);
+			}
+		});
+		this.add(settings);
+	}
 
-    @ResourceBundleBean(key = "edit.select_next")
-    private JMenuItem selectNext;
+	/**
+	 * Get active editor part
+	 * @return current editor
+	 */
+	private IEditorPart getActiveEditorPart()
+	{
+		return this.mainFrame.getActiveWorkspace().getEditorPart();
+	}
 
-    @ResourceBundleBean(key = "edit.select_previous")
-    private JMenuItem selectPrevious;
+	/**
+	 * Is there any workspace displayed
+	 * @return true id at least one workspace is reachable
+	 */
+	private boolean isThereAnyWorkspaceDisplayed()
+	{
+		return mainFrame.getWorkspaceList().size() > 0;
+	}
+
 }

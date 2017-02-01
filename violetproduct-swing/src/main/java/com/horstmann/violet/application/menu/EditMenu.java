@@ -21,13 +21,21 @@
 
 package com.horstmann.violet.application.menu;
 
+import java.awt.AWTException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.List;
 
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JWindow;
+import javax.swing.SwingUtilities;
 
+import com.horstmann.violet.application.gui.MagnifierFrame;
 import com.horstmann.violet.application.gui.MainFrame;
 import com.horstmann.violet.framework.injection.resources.ResourceBundleInjector;
 import com.horstmann.violet.framework.injection.resources.annotation.ResourceBundleBean;
@@ -229,10 +237,91 @@ public class EditMenu extends JMenu
             }
         });
         this.add(selectPrevious);
-
+        
+		magnifier.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						if (isMagnifierOpened()) {
+							closeMagnifierFrame();
+						} else {
+							createMagnifierFrame();
+						}
+					}
+				});
+			}
+		});
+        this.add(magnifier);
     }
+    
+    /**
+     * Is magnifier open
+     * @return true if is magnifier window
+     */
+    private boolean isMagnifierOpened() {
+		return (magnifierWindow != null);
+	}
+    
+    /**
+     * Close magnifier frame
+     */
+    private void closeMagnifierFrame() {
+    	magnifierFrame.getMouseMoveTimer().stop();
+    	magnifierWindow.dispose();
+    	magnifierFrame = null;
+    	magnifierWindow = null;
+    }
+    
+    /**
+     * Create magnifier frame
+     */
+	private void createMagnifierFrame() {
+		try {
+			magnifierWindow = new JWindow();
+			magnifierFrame = new MagnifierFrame();
+			magnifierWindow.add(magnifierFrame.getZoomPanel());
+			magnifierWindow.setLocationByPlatform(true);
+			magnifierWindow.setLocation(getMagnifierStartupX(),getMagnifierStartupY());
+			magnifierWindow.setAlwaysOnTop(true);
+            magnifierWindow.addWindowListener(createMagnifierWindowListener());
+			magnifierWindow.setVisible(true);
+			magnifierWindow.pack();
+		} catch (AWTException e) {
+			System.err.println("Failed create magnifier window");
+		}
+	};
+
+	/**
+	 * Window listener
+	 * @return magnifier window
+	 */
+    private WindowListener createMagnifierWindowListener() {
+		return new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                magnifierWindow.dispose();
+            }
+        };
+	}
 
     /**
+     * Get magnifier startup Y
+     * @return magnifierStartaupTop
+     */
+	private int getMagnifierStartupY() {
+    	return mainFrame.getMainPanel().getY() + MagnifierFrame.PADDING_TOP;
+	}
+
+	/**
+	 * Get magnifier startup X
+	 * @return magnifierStartaupRight
+	 */
+	private int getMagnifierStartupX() {
+    	return mainFrame.getX() + mainFrame.getWidth() - MagnifierFrame.PADDING_RIGHT;
+	}
+
+	/**
      * @return current editor
      */
     private IEditorPart getActiveEditorPart()
@@ -250,6 +339,9 @@ public class EditMenu extends JMenu
     
     /** Application frame */
     private MainFrame mainFrame;
+    
+    private JWindow magnifierWindow;
+    private MagnifierFrame magnifierFrame;
 
     @ResourceBundleBean(key = "edit.undo")
     private JMenuItem undo;
@@ -280,4 +372,7 @@ public class EditMenu extends JMenu
 
     @ResourceBundleBean(key = "edit.select_previous")
     private JMenuItem selectPrevious;
+    
+    @ResourceBundleBean(key = "edit.magnifier")
+    private JMenuItem magnifier;
 }

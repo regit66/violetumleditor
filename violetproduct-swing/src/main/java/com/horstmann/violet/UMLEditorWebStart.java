@@ -20,46 +20,27 @@
 
 package com.horstmann.violet;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JFrame;
-
 import com.horstmann.violet.application.gui.MainFrame;
-import com.horstmann.violet.framework.dialog.DialogFactory;
-import com.horstmann.violet.framework.dialog.DialogFactoryMode;
-import com.horstmann.violet.framework.file.chooser.IFileChooserService;
-import com.horstmann.violet.framework.file.chooser.JNLPFileChooserService;
-import com.horstmann.violet.framework.file.persistence.IFilePersistenceService;
-import com.horstmann.violet.framework.file.persistence.XHTMLPersistenceService;
-import com.horstmann.violet.framework.injection.bean.ManiocFramework.BeanFactory;
 import com.horstmann.violet.framework.injection.bean.ManiocFramework.BeanInjector;
 import com.horstmann.violet.framework.injection.bean.ManiocFramework.InjectedBean;
 import com.horstmann.violet.framework.plugin.PluginLoader;
-import com.horstmann.violet.framework.theme.BlueAmbianceTheme;
-import com.horstmann.violet.framework.theme.ClassicMetalTheme;
-import com.horstmann.violet.framework.theme.DarkBlueTheme;
-import com.horstmann.violet.framework.theme.ITheme;
-import com.horstmann.violet.framework.theme.ThemeManager;
-import com.horstmann.violet.framework.userpreferences.IUserPreferencesDao;
-import com.horstmann.violet.framework.userpreferences.JNLPUserPreferencesDao;
+
+import javax.swing.*;
 
 /**
  * A program for editing UML diagrams.
  */
-public class UMLEditorWebStart
-{
+public class UMLEditorWebStart {
 
     /**
      * Standalone application entry point
-     * 
+     *
      * @param args (could contains file to open)
      */
-    public static void main(String[] args)
-    {
+    public static void main(final String[] args) {
         new UMLEditorWebStart();
     }
-    
+
     /**
      * Default constructor
      */
@@ -68,40 +49,17 @@ public class UMLEditorWebStart
         BeanInjector.getInjector().inject(this);
         createWebstartWorkspace();
     }
-    
-    private void initBeanFactory() {
-        IUserPreferencesDao userPreferencesDao = new JNLPUserPreferencesDao();
-        BeanFactory.getFactory().register(IUserPreferencesDao.class, userPreferencesDao);
-        
-        ThemeManager themeManager = new ThemeManager();
-        ITheme theme1 = new ClassicMetalTheme();
-        ITheme theme2 = new BlueAmbianceTheme();
-        ITheme theme3 = new DarkBlueTheme();
-        List<ITheme> themeList = new ArrayList<ITheme>();
-        themeList.add(theme1);
-        themeList.add(theme2);
-        themeList.add(theme3);
-        themeManager.setInstalledThemes(themeList);
-        BeanFactory.getFactory().register(ThemeManager.class, themeManager);
-        themeManager.applyPreferedTheme();
-        
-        DialogFactory dialogFactory = new DialogFactory(DialogFactoryMode.INTERNAL);
-        BeanFactory.getFactory().register(DialogFactory.class, dialogFactory);
 
-        IFilePersistenceService filePersistenceService = new XHTMLPersistenceService();
-        BeanFactory.getFactory().register(IFilePersistenceService.class, filePersistenceService);
-        
-        IFileChooserService fileChooserService = new JNLPFileChooserService();
-        BeanFactory.getFactory().register(IFileChooserService.class, fileChooserService);
+    private void initBeanFactory() {
+        new UMLEditor().init();
     }
-    
+
     /**
      * Creates workspace when application works from java web start. It contains :<br> + plugins loading + GUI theme management
      */
-    private void createWebstartWorkspace()
-    {
+    private void createWebstartWorkspace() {
         installPlugins();
-        MainFrame mainFrame = new MainFrame();
+        final MainFrame mainFrame = new MainFrame();
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         mainFrame.setVisible(true);
     }
@@ -109,12 +67,11 @@ public class UMLEditorWebStart
     /**
      * Install plugins
      */
-    private void installPlugins()
-    {
+    private void installPlugins() {
         this.pluginLoader.installPlugins();
     }
 
-    
+
     @InjectedBean
     private PluginLoader pluginLoader;
 

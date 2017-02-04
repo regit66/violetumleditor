@@ -20,92 +20,45 @@
 
 package com.horstmann.violet;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JApplet;
-import javax.swing.JFrame;
-
 import com.horstmann.violet.application.gui.MainFrame;
-import com.horstmann.violet.framework.dialog.DialogFactory;
-import com.horstmann.violet.framework.dialog.DialogFactoryMode;
-import com.horstmann.violet.framework.file.chooser.IFileChooserService;
-import com.horstmann.violet.framework.file.chooser.JFileChooserService;
-import com.horstmann.violet.framework.file.persistence.IFilePersistenceService;
-import com.horstmann.violet.framework.file.persistence.XHTMLPersistenceService;
-import com.horstmann.violet.framework.injection.bean.ManiocFramework.BeanFactory;
 import com.horstmann.violet.framework.injection.bean.ManiocFramework.BeanInjector;
 import com.horstmann.violet.framework.injection.bean.ManiocFramework.InjectedBean;
 import com.horstmann.violet.framework.plugin.PluginLoader;
-import com.horstmann.violet.framework.theme.ClassicMetalTheme;
-import com.horstmann.violet.framework.theme.DarkBlueTheme;
-import com.horstmann.violet.framework.theme.ITheme;
-import com.horstmann.violet.framework.theme.ThemeManager;
-import com.horstmann.violet.framework.theme.BlueAmbianceTheme;
-import com.horstmann.violet.framework.userpreferences.AppletUserPreferencesDao;
-import com.horstmann.violet.framework.userpreferences.IUserPreferencesDao;
+
+import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * A program for editing UML diagrams.
  */
-public class UMLEditorApplet extends JApplet
-{
+public class UMLEditorApplet extends JApplet {
 
     /*
      * Applet entry point (non-Javadoc)
      * 
      * @see java.applet.Applet#init()
      */
-    public void init()
-    {
+    public void init() {
         initBeanFactory();
         BeanInjector.getInjector().inject(this);
         createAppletWorkspace();
     }
-    
+
     private void initBeanFactory() {
-        IUserPreferencesDao userPreferencesDao = new AppletUserPreferencesDao();
-        BeanFactory.getFactory().register(IUserPreferencesDao.class, userPreferencesDao);
-        
-        ThemeManager themeManager = new ThemeManager();
-        ITheme theme1 = new ClassicMetalTheme();
-        ITheme theme2 = new BlueAmbianceTheme();
-        ITheme theme3 = new DarkBlueTheme();
-        List<ITheme> themeList = new ArrayList<ITheme>();
-        themeList.add(theme1);
-        themeList.add(theme2);
-        themeList.add(theme3);
-        themeManager.setInstalledThemes(themeList);
-        BeanFactory.getFactory().register(ThemeManager.class, themeManager);
-        themeManager.applyPreferedTheme();
-
-        DialogFactory dialogFactory = new DialogFactory(DialogFactoryMode.INTERNAL);
-        BeanFactory.getFactory().register(DialogFactory.class, dialogFactory);
-        
-        IFilePersistenceService filePersistenceService = new XHTMLPersistenceService();
-        BeanFactory.getFactory().register(IFilePersistenceService.class, filePersistenceService);
-        
-        IFileChooserService fileChooserService = new JFileChooserService();
-        BeanFactory.getFactory().register(IFileChooserService.class, fileChooserService);
-
+        new UMLEditor().init();
     }
-
 
     /**
      * Creates workspace when application works as an applet. It contains :<br>
      * + plugins loading + GUI theme management + launging argments to open diagram<br>
      */
-    private void createAppletWorkspace()
-    {
+    private void createAppletWorkspace() {
         installPlugins();
-        MainFrame mainFrame = new MainFrame();
+        final MainFrame mainFrame = new MainFrame();
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        mainFrame.addWindowListener(new WindowAdapter()
-        {
-            public void windowClosed(WindowEvent e)
-            {
+        mainFrame.addWindowListener(new WindowAdapter() {
+            public void windowClosed(final WindowEvent e) {
                 System.out.println("editor closed");
             }
         });
@@ -116,8 +69,7 @@ public class UMLEditorApplet extends JApplet
     /**
      * Install plugins
      */
-    private void installPlugins()
-    {
+    private void installPlugins() {
         this.pluginLoader.installPlugins();
     }
 

@@ -20,74 +20,50 @@
 
 package com.horstmann.violet;
 
-import java.awt.Toolkit;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
 import com.horstmann.violet.application.gui.MainFrame;
 import com.horstmann.violet.application.gui.SplashScreen;
-import com.horstmann.violet.framework.dialog.DialogFactory;
-import com.horstmann.violet.framework.dialog.DialogFactoryMode;
 import com.horstmann.violet.framework.file.GraphFile;
 import com.horstmann.violet.framework.file.IFile;
-import com.horstmann.violet.framework.file.IGraphFile;
 import com.horstmann.violet.framework.file.LocalFile;
-import com.horstmann.violet.framework.file.chooser.IFileChooserService;
-import com.horstmann.violet.framework.file.chooser.JFileChooserService;
-import com.horstmann.violet.framework.file.persistence.IFilePersistenceService;
-import com.horstmann.violet.framework.file.persistence.XHTMLPersistenceService;
 import com.horstmann.violet.framework.injection.bean.ManiocFramework.BeanFactory;
 import com.horstmann.violet.framework.injection.bean.ManiocFramework.BeanInjector;
 import com.horstmann.violet.framework.injection.bean.ManiocFramework.InjectedBean;
 import com.horstmann.violet.framework.plugin.PluginLoader;
-import com.horstmann.violet.framework.theme.BlueAmbianceTheme;
-import com.horstmann.violet.framework.theme.ClassicMetalTheme;
-import com.horstmann.violet.framework.theme.DarkAmbianceTheme;
-import com.horstmann.violet.framework.theme.DarkBlueTheme;
-import com.horstmann.violet.framework.theme.ITheme;
-import com.horstmann.violet.framework.theme.ThemeManager;
-import com.horstmann.violet.framework.userpreferences.DefaultUserPreferencesDao;
-import com.horstmann.violet.framework.userpreferences.IUserPreferencesDao;
 import com.horstmann.violet.framework.userpreferences.UserPreferencesService;
 import com.horstmann.violet.framework.util.VersionChecker;
-import com.horstmann.violet.workspace.IWorkspace;
 import com.horstmann.violet.workspace.Workspace;
 
 import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * A program for editing UML diagrams.
  */
-public class UMLEditorApplication
-{
+public class UMLEditorApplication {
 
     /**
      * Standalone application entry point
-     * 
+     *
      * @param args (could contains file to open)
      */
-    public static void main(String[] args)
-    {
-        for (int i = 0; i < args.length; i++)
-        {
-            String arg = args[i];
-            if ("-reset".equals(arg))
-            {
+    public static void main(final String[] args) {
+        for (int i = 0; i < args.length; i++) {
+            final String arg = args[i];
+            if ("-reset".equals(arg)) {
                 initBeanFactory();
-                UserPreferencesService service = BeanFactory.getFactory().getBean(UserPreferencesService.class);
+                final UserPreferencesService service = BeanFactory.getFactory().getBean(UserPreferencesService.class);
                 service.reset();
                 System.out.println("User preferences reset done.");
             }
-            if ("-english".equals(arg))
-            {
+            if ("-english".equals(arg)) {
                 Locale.setDefault(Locale.ENGLISH);
                 System.out.println("Language forced to english.");
             }
-            if ("-help".equals(arg) || "-?".equals(arg))
-            {
+            if ("-help".equals(arg) || "-?".equals(arg)) {
                 System.out.println("Violet UML Editor command line help. Options are :");
                 System.out.println("-reset to reset user preferences,");
                 System.out.println("-english to force language to english.");
@@ -99,46 +75,18 @@ public class UMLEditorApplication
 
     /**
      * Default constructor
-     * 
+     *
      * @param filesToOpen
      */
-    private UMLEditorApplication(String[] filesToOpen)
-    {
+    private UMLEditorApplication(final String[] filesToOpen) {
         initBeanFactory();
         BeanInjector.getInjector().inject(this);
         createDefaultWorkspace(filesToOpen);
     }
-    
+
     private static void initBeanFactory() {
-        IUserPreferencesDao userPreferencesDao = new DefaultUserPreferencesDao();
-        BeanFactory.getFactory().register(IUserPreferencesDao.class, userPreferencesDao);
-
-        ThemeManager themeManager = new ThemeManager();
-        ITheme theme1 = new ClassicMetalTheme();
-        ITheme theme2 = new BlueAmbianceTheme();
-        ITheme theme3 = new DarkAmbianceTheme();
-        ITheme theme4 = new DarkBlueTheme();
-        List<ITheme> themeList = new ArrayList<ITheme>();
-        themeList.add(theme1);
-        themeList.add(theme2);
-        themeList.add(theme3);
-        themeList.add(theme4);
-        themeManager.setInstalledThemes(themeList);
-        themeManager.applyPreferedTheme();
-        BeanFactory.getFactory().register(ThemeManager.class, themeManager);
-        themeManager.applyPreferedTheme();
-
-        DialogFactory dialogFactory = new DialogFactory(DialogFactoryMode.INTERNAL);
-        BeanFactory.getFactory().register(DialogFactory.class, dialogFactory);
-        
-        IFilePersistenceService filePersistenceService = new XHTMLPersistenceService();
-        BeanFactory.getFactory().register(IFilePersistenceService.class, filePersistenceService);
-        
-        IFileChooserService fileChooserService = new JFileChooserService();
-        BeanFactory.getFactory().register(IFileChooserService.class, fileChooserService);
+        new UMLEditor().init();
     }
-
-
 
     /**
      * Creates workspace when application works as a standalone one. It contains :<br>
@@ -147,63 +95,92 @@ public class UMLEditorApplication
      * + command line args<br>
      * + last workspace restore<br>
      */
-    private void createDefaultWorkspace(String[] filesToOpen)
-    {
-        installPlugins();
-        SplashScreen splashScreen = new SplashScreen();
-        splashScreen.setVisible(true);
+    private void createDefaultWorkspace(final String[] filesToOpen) {
+        final MainFrame mainFrame = new MainFrame();
+        final SplashScreen splashScreen = new SplashScreen();
+        this.pluginLoader.installPlugins();
         this.versionChecker.checkJavaVersion();
-        MainFrame mainFrame = new MainFrame();
+
+        splashScreen.setVisible(true);
+        setMainframe(mainFrame);
+        SplashScreen.displayOverEditor(mainFrame, 1000);
+        createLastSessionFilesMenu(filesToOpen, mainFrame, this.userPreferencesService.getOpenedFilesDuringLastSession());
+        activeMainframe(mainFrame, this.userPreferencesService.getActiveDiagramFile());
+        hiddenSplashScreen(splashScreen);
+    }
+
+    /**
+     * Sets mainframe: its size and an extended state.
+     *
+     * @param mainFrame
+     */
+    private void setMainframe(final MainFrame mainFrame) {
         mainFrame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        SplashScreen.displayOverEditor(mainFrame, 1000);
-        List<IFile> fullList = new ArrayList<IFile>();
-        List<IFile> lastSessionFiles = this.userPreferencesService.getOpenedFilesDuringLastSession();
-        fullList.addAll(lastSessionFiles);
-        for (String aFileToOpen : filesToOpen)
-        {
-            try
-            {
-                LocalFile localFile = new LocalFile(new File(aFileToOpen));
-                fullList.add(localFile);
-            }
-            catch (IOException e)
-            {
-                // There's nothing to do. We're starting the program
-                // Some logs should be nive
-                e.printStackTrace();
-            }
-        }
-        // Open files
-        for (IFile aFile : lastSessionFiles)
-        {
-            try
-            {
-                IGraphFile graphFile = new GraphFile(aFile);
-                IWorkspace workspace = new Workspace(graphFile);
-                mainFrame.addWorkspace(workspace);
-            }
-            catch (Exception e)
-            {
-                System.err.println("Unable to open file " + aFile.getFilename() + "from location " + aFile.getDirectory());
-                userPreferencesService.removeOpenedFile(aFile);
-                System.err.println("Removed from user preferences!");
-            }
-        }
-        IFile activeFile = this.userPreferencesService.getActiveDiagramFile();
-        mainFrame.setActiveWorkspace(activeFile);
-        mainFrame.setVisible(true);
+    }
+
+    /**
+     * Sets the splash screen as invisible.
+     *
+     * @param splashScreen
+     */
+    private void hiddenSplashScreen(final SplashScreen splashScreen) {
         splashScreen.setVisible(false);
         splashScreen.dispose();
     }
 
     /**
-     * Install plugins
+     * Actives the main frame.
+     *
+     * @param mainFrame
+     * @param activeFile
      */
-    private void installPlugins()
-    {
+    private void activeMainframe(final MainFrame mainFrame, final IFile activeFile) {
+        mainFrame.setActiveWorkspace(activeFile);
+        mainFrame.setVisible(true);
+    }
 
-        this.pluginLoader.installPlugins();
+
+    /**
+     * Creates a list with files from the last session.
+     *
+     * @param filesToOpen
+     * @param mainFrame
+     * @param lastSessionFiles
+     */
+    private void createLastSessionFilesMenu(final String[] filesToOpen, final MainFrame mainFrame, final List<IFile> lastSessionFiles) {
+        addFilesToList(filesToOpen, lastSessionFiles);
+        addLastSessionFilesGraphical(mainFrame, lastSessionFiles);
+    }
+
+    /**
+     * Adds files to open.
+     *
+     * @param filesToOpen
+     * @param fullList
+     */
+    private void addFilesToList(final String[] filesToOpen, final List<IFile> fullList) {
+        for (final String fileToOpen : filesToOpen) {
+            try {
+                fullList.add(new LocalFile(new File(fileToOpen)));
+            } catch (final IOException ioexception) {
+                ioexception.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * @param mainFrame
+     * @param lastSessionFiles
+     */
+    private void addLastSessionFilesGraphical(final MainFrame mainFrame, final List<IFile> lastSessionFiles) {
+        for (final IFile file : lastSessionFiles) {
+            try {
+                mainFrame.addWorkspace(new Workspace(new GraphFile(file)));
+            } catch (final IOException ioexception) {
+                userPreferencesService.removeOpenedFile(file);
+            }
+        }
     }
 
 
@@ -215,6 +192,5 @@ public class UMLEditorApplication
 
     @InjectedBean
     private UserPreferencesService userPreferencesService;
-
 
 }

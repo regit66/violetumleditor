@@ -192,12 +192,14 @@ public class ClassNode extends ColorableNode
     private static final int MIN_WIDTH = 100;
     private static final String STATIC = "<<static>>";
     private static final String ABSTRACT = "«abstract»";
+    private static final String HIDE= "hide ";
     private static final String[][] SIGNATURE_REPLACE_KEYS = {
             { "public ", "+ " },
             { "package ", "~ " },
             { "protected ", "# " },
             { "private ", "- " },
-            { "property ", "/ " }
+            { "property ", "/ " },
+            { "hide ", ""}
     };
 
     private static final List<String> STEREOTYPES = Arrays.asList(
@@ -210,7 +212,8 @@ public class ClassNode extends ColorableNode
             "«Control»",
             "«Boundary»",
             "«Auxiliary»",
-            ABSTRACT
+            ABSTRACT,
+            HIDE
     );
 
     private static final LineText.Converter NAME_CONVERTER = new LineText.Converter()
@@ -245,6 +248,11 @@ public class ClassNode extends ColorableNode
         public OneLineText toLineString(String text)
         {
             OneLineText lineString = new OneLineText(text);
+
+            if(lineString.contains(HIDE))
+            {
+                lineString = new HideDecorator(lineString);
+            }
 
             if(lineString.contains(STATIC))
             {

@@ -1,6 +1,7 @@
 \documentclass{article}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{graphicx}
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
@@ -35,9 +36,83 @@
   \newpage
   \pagenumbering{arabic}
 
-TODO : Dodać dependencje na build
-Jak skonfigurować (krok po kroku numerowane)
-Konkretne rzeczy, które zrobiliśmy i jak zrobiliśmy
+\section{Getting started with VioletUML}
+\subsection{Building VioletUML}
 
+In order to create clean development build you'll have to comment out few lines due to some broken functionality in modules responsible for
+building executable for specific platform namely 'violetproduct-exe' and 'violetproduct-web' which are causing compilation errors.
+Working version should already be at origin/master of this VioletUML although this problem might return in the future with other modules.
+Related issue 32. You'll need to edit pom.xml in your project main directory and comment out fallowing lines making it look like this:
+\begin{lstlisting}[language=XML]
+<modules>
+	<module>violet-framework</module>
+	<module>violetplugin-activitydiagram</module>
+	<module>violetplugin-communicationdiagram</module>
+	<module>violetplugin-objectdiagram</module>
+	<module>violetplugin-sequecnediagram</module>
+	<module>violetplugin-statediagram</module>
+	<module>violetplugin-usecasediagram</module>
+	<module>violetplugin-swing</module>
+	<!--<module>violetproduct-jnlp</module> -->
+	<!--<module>violetproduct-exe</module> -->
+	<!--<module>violetproduct-rpm</module> -->
+	<module>violetproduct-deb</module>
+	<!--<module>violetproduct-web</module> -->
+\end{lstlisting}
+
+You can probably already notice common theme of how functionality is arranged in this project. We will touch on this subject in the next subsection.
+For now you should be able to run maven clean build.
+\begin{lstlisting}
+	mvn clean install
+\end{lstlisting}
+Maven should finish building with no errors.
+
+Congratulations! You now have working binaries of VioletUML.
+
+\subsection{Violet UI}
+
+\includegraphics{assets/violetUI}
+
+VioletUML class diagram view. On the top menu we have functionality responsible for saving, starting new file, closing program, editing, undo and redo.
+On the left there are diagram specific tools (violetplugin-*)
+
+\subsection{Folder structure}
+
+violet-framework/ is the core structure of this application. You can find here :
+- bean injection framework (which is used for loading plugins)
+- graphics which is responsible for front end part of the application like overall layout.
+- plugin loader
+- swingextention that consists mostly of definitions for basic UI elements
+- theme is responsible for holding information about layout colors
+
+violetplugin-*/ those folders beginning with violet and followed with plugin means certain functionality
+package. e.g. activitydiagram holds logic responsible for everything related to activity diagram.
+
+violetproduct-*/ here you can find binaries after compilation is successful
+where "*" means respective format for those binaries.
+
+\subsection{Known issues}
+
+TBA
+
+\subsection{TODO for future releases}
+As you probably noticed VioletUML is *slightly* bloated. If you have some spare time
+everybody would benefit from overall simplification of core functionalities.
+Maybe introducing MV* pattern in order to separate business logic from frontend would be a good idea.
+Although it might be very difficult to accomplish.
+
+\subsection{Change log}
+
+Changes from 02.2017 :
+
+- overall refactoring and small code quality improvements
+- created this documentation
+- added common relation edge
+- added safe delete
+- added possibility of using html tags
+- added full screen capabilities
+- added shortcuts that waren't previusly defined
+- added integration with google drive
+- added history panel
 
 \end{document}

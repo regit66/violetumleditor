@@ -32,6 +32,7 @@ public class AutoSave implements ActionListener {
 	private MainFrame mainFrame;
 	private Timer saveTimer;
 	private int saveInterval;
+	private boolean autoSaveEnabled;
 	private String autoSaveDirectory;
 
 	@InjectedBean
@@ -41,7 +42,7 @@ public class AutoSave implements ActionListener {
 	* Constructor Autosave
 	*  @param mainFrame where is attached this menu
 	*/
-	public AutoSave(MainFrame mainFrame)
+;	public AutoSave(MainFrame mainFrame)
 	{
 		BeanInjector.getInjector().inject(this);
 		AutosaveSettings settings = new AutosaveSettings();
@@ -49,7 +50,8 @@ public class AutoSave implements ActionListener {
 		if (settings.isEnableAutosave()) {
 			saveInterval = settings.getAutosaveInterval();
 			autoSaveDirectory = settings.getAutosavePath();
-	
+			autoSaveEnabled = settings.isEnableAutosave();
+			
 			if (mainFrame != null)
 			{
 				this.mainFrame = mainFrame;
@@ -132,9 +134,9 @@ public class AutoSave implements ActionListener {
 			for (IWorkspace workspace: mainFrame.getWorkspaceList())
 		{
 			IGraphFile graphFile = workspace.getGraphFile();
-			if (graphFile.isSaveRequired())
+			if (autoSaveEnabled && graphFile.isSaveRequired())
 			{
-				graphFile.autoSave();
+				graphFile.autoSave(autoSaveDirectory);
 			}
 		}
 	}

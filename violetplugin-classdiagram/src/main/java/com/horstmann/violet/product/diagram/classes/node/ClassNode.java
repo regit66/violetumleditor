@@ -8,22 +8,26 @@ import java.util.regex.Pattern;
 
 import com.horstmann.violet.framework.graphics.Separator;
 import com.horstmann.violet.framework.graphics.content.*;
-import com.horstmann.violet.framework.graphics.content.VerticalLayout;
 import com.horstmann.violet.framework.graphics.shape.ContentInsideRectangle;
 import com.horstmann.violet.product.diagram.abstracts.node.IRenameableNode;
+import com.horstmann.violet.product.diagram.abstracts.node.INode;
 import com.horstmann.violet.product.diagram.classes.ClassDiagramConstant;
 import com.horstmann.violet.product.diagram.common.node.ColorableNodeWithMethodsInfo;
 import com.horstmann.violet.product.diagram.property.text.decorator.*;
 import com.horstmann.violet.product.diagram.common.node.ColorableNode;
 import com.horstmann.violet.product.diagram.property.text.LineText;
-import com.horstmann.violet.product.diagram.abstracts.node.INode;
-import com.horstmann.violet.product.diagram.property.text.MultiLineText;
+import com.horstmann.violet.product.diagram.abstracts.node.INamedNode;import com.horstmann.violet.product.diagram.property.text.MultiLineText;
 import com.horstmann.violet.product.diagram.property.text.SingleLineText;
+import com.horstmann.violet.product.diagram.property.text.decorator.*;
+
+import java.awt.*;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A class node in a class diagram.
  */
-public class ClassNode extends ColorableNodeWithMethodsInfo implements IRenameableNode
+public class ClassNode extends ColorableNodeWithMethodsInfo implements INamedNode, IRenameableNode
 {
 	/**
      * Construct a class node with a default size
@@ -142,16 +146,6 @@ public class ClassNode extends ColorableNodeWithMethodsInfo implements IRenameab
     }
 
     /**
-     * Gets the attributes property value.
-     *
-     * @return the attributes of this class
-     */
-    public LineText getAttributes()
-    {
-        return attributes;
-    }
-
-    /**
      * Replaces class name occurrences in attributes
      * @param oldValue old class name
      * @param newValue new class name
@@ -190,8 +184,6 @@ public class ClassNode extends ColorableNodeWithMethodsInfo implements IRenameab
 
         return renamedAttributes.toString();
     }
-
-    private MultiLineText attributes;
 
     private transient Separator separator;
 

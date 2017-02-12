@@ -36,6 +36,14 @@ public class ColorableNodeWithMethodsInfo extends ColorableNode implements IRena
         }
     }
 
+    @Override
+    public LineText getAttributes()
+    {
+        return attributes;
+    }
+
+
+
     /**
      *  Finds all of oldValue class occurrences in methods and replaces it with newValue
      * @param oldValue old class name
@@ -73,7 +81,6 @@ public class ColorableNodeWithMethodsInfo extends ColorableNode implements IRena
         }
         return methodToRename;
     }
-
 
     /**
      * Sets the methods property value.
@@ -118,6 +125,7 @@ public class ColorableNodeWithMethodsInfo extends ColorableNode implements IRena
         }
     };
 
+    protected MultiLineText attributes;
     private static final String STATIC = "<<static>>";
     private static final String[][] SIGNATURE_REPLACE_KEYS = {
             { "public ", "+ " },

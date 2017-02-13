@@ -18,8 +18,7 @@ import org.jsoup.Jsoup;
  */
 public class EditSelectedDuplicateBehavior {
 
-    public EditSelectedDuplicateBehavior()
-    {
+    public EditSelectedDuplicateBehavior() {
         ResourceBundleInjector.getInjector().inject(this);
         BeanInjector.getInjector().inject(this);
     }
@@ -28,35 +27,29 @@ public class EditSelectedDuplicateBehavior {
      * @param edited Actually edited node
      * @param nodes Existing nodes iterator
      */
-    public void detectDuplicatedNode(final INamedNode edited, final Iterator<INode> nodes, final String propertyName)
-    {
-        if (propertyName.equals(NAME_OF_DETECTED_PROPERTY))
-        {
+    public void detectDuplicatedNode(final INamedNode edited, final Iterator<INode> nodes,
+            final String propertyName) {
+        if (propertyName.equals(NAME_OF_DETECTED_PROPERTY)) {
             INode tmpNode;
-            while (nodes.hasNext())
-            {
+            while (nodes.hasNext()) {
                 tmpNode = nodes.next();
-                if (tmpNode instanceof INamedNode)
-                {
+                if (tmpNode instanceof INamedNode) {
                     checkNode(edited, (INamedNode) tmpNode);
                 }
             }
         }
     }
 
-    private void checkNode(final INamedNode editedNode, final INamedNode node)
-    {
+    private void checkNode(final INamedNode editedNode, final INamedNode node) {
         final boolean isDuplicate = (!node.equals(editedNode) && getNodeName(node)
                 .equals(getNodeName(editedNode)));
-        if (isDuplicate)
-        {
+        if (isDuplicate) {
             dialogFactory.showPopupNotificationDialog(duplicateDetectedMessage, DIALOG_WIDTH,
                     DIALOG_HEIGHT);
         }
     }
 
-    private String getNodeName(final INamedNode node)
-    {
+    private String getNodeName(final INamedNode node) {
         String name = node.getName().getText();
         final int stereotypeEnd;
         name = Jsoup.parse(name).text();

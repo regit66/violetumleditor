@@ -204,7 +204,7 @@ public class InterfaceNode extends ColorableNode implements INamedNode, IReverta
     private static final int MIN_NAME_HEIGHT = 45;
     private static final int MIN_WIDTH = 100;
 	private boolean VISIBLE_METHODS_AND_ATRIBUTES = true;
-    private static final String STATIC = "<<static>>";
+    private static final String STATIC = "\u00ABstatic\u00BB";
     private static final String HIDE= "hide ";
 
     private static LineText.Converter nameConverter = new LineText.Converter()
@@ -212,7 +212,7 @@ public class InterfaceNode extends ColorableNode implements INamedNode, IReverta
         @Override
         public OneLineText toLineString(String text)
         {
-            return new PrefixDecorator( new LargeSizeDecorator(new OneLineText(text)), "<center>«interface»</center>");
+            return new PrefixDecorator( new LargeSizeDecorator(new OneLineText(text)), "<center>\u00ABinterface\u00BB</center>");
         }
     };
     private static final LineText.Converter methodsConverter = new LineText.Converter()

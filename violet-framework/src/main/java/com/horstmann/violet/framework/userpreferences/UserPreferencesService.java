@@ -3,6 +3,7 @@ package com.horstmann.violet.framework.userpreferences;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import com.horstmann.violet.framework.file.IFile;
 import com.horstmann.violet.framework.injection.bean.ManiocFramework.InjectedBean;
@@ -30,6 +31,32 @@ public class UserPreferencesService
         IUserPreferencesDao pService = PreferencesServiceFactory.getInstance();
         String preferedLAF = pService.get(PreferencesConstant.LOOK_AND_FEEL, BlueAmbianceTheme.class.getName());
         return preferedLAF;
+    }
+
+    public void setSelectedClassNameOption(String option)
+    {
+            IUserPreferencesDao pService = PreferencesServiceFactory.getInstance();
+            pService.put(PreferencesConstant.CLASS_NAME_OPTION, option);
+    }
+
+    public String  getSelectedClassNameOption()
+    {
+            IUserPreferencesDao pService = PreferencesServiceFactory.getInstance();
+            String preferedOption = pService.get(PreferencesConstant.CLASS_NAME_OPTION , "disabled");
+            return preferedOption;
+    }
+
+    public void setPreferedLanguage(String languageName)
+    {
+            IUserPreferencesDao pService = PreferencesServiceFactory.getInstance();
+            pService.put(PreferencesConstant.LANGUAGE, languageName);
+        }
+
+    public String getPreferedLanguage()
+    {
+            IUserPreferencesDao pService = PreferencesServiceFactory.getInstance();
+            String preferedLanguage = pService.get(PreferencesConstant.LANGUAGE, Locale.getDefault().getCountry().toString());
+            return preferedLanguage;
     }
 
     /**

@@ -240,12 +240,16 @@ public class EditMenu extends JMenu {
         
 		magnifier.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				SwingUtilities.invokeLater(new Runnable() {
+				SwingUtilities.invokeLater(new Runnable() 
+				{
 					@Override
 					public void run() {
-						if (isMagnifierOpened()) {
+						if (isMagnifierOpened()) 
+						{
 							closeMagnifierFrame();
-						} else {
+						} 
+						else 
+						{
 							createMagnifierFrame();
 						}
 					}

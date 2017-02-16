@@ -48,9 +48,11 @@ public class MagnifierFrame {
 		return new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent mouseEvent) {
-				if (SwingUtilities.isLeftMouseButton(mouseEvent)) {
+				if (SwingUtilities.isLeftMouseButton(mouseEvent)) 
+				{
 					increaseZoomLevel();
-				} else if (SwingUtilities.isRightMouseButton(mouseEvent)) {
+				} else if (SwingUtilities.isRightMouseButton(mouseEvent)) 
+				{
 					decreaseZoomLevel();
 				}			
 			}		
@@ -103,11 +105,16 @@ public class MagnifierFrame {
 	 * Increase zoom level
 	 */
 	private void increaseZoomLevel() {
-		if (zoomFactor == ZOOM_LEVEL_1) {
+		if (zoomFactor == ZOOM_LEVEL_1) 
+		{
 			zoomFactor = ZOOM_LEVEL_2;
-		} else if (zoomFactor == ZOOM_LEVEL_2) {
+		} 
+			else if (zoomFactor == ZOOM_LEVEL_2) 
+		{
 			zoomFactor = ZOOM_LEVEL_3;
-		} else if (zoomFactor == ZOOM_LEVEL_3) {
+		} 
+			else if (zoomFactor == ZOOM_LEVEL_3) 
+		{
 			zoomFactor = ZOOM_LEVEL_1;
 		}
 	}
@@ -116,11 +123,14 @@ public class MagnifierFrame {
 	 * Decrease zoom level
 	 */
 	private void decreaseZoomLevel() {
-		if (zoomFactor == ZOOM_LEVEL_3) {
+		if (zoomFactor == ZOOM_LEVEL_3) 
+		{
 			zoomFactor = ZOOM_LEVEL_2;
-		} else if (zoomFactor == ZOOM_LEVEL_2) {
+		} else if (zoomFactor == ZOOM_LEVEL_2) 
+		{
 			zoomFactor = ZOOM_LEVEL_1;
-		} else if (zoomFactor == ZOOM_LEVEL_1) {
+		} else if (zoomFactor == ZOOM_LEVEL_1) 
+		{
 			zoomFactor = ZOOM_LEVEL_3;
 		}		
 	}

@@ -394,6 +394,10 @@ public abstract class AbstractNode implements INode
         return true;
     }
 
+    /* Switching visible of classNodes and interfaceNodes*/
+	public void switchVisible() {
+	}
+
     public void onConnectedEdge(IEdge connectedEdge)
     {}
 

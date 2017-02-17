@@ -170,16 +170,20 @@ public class ClassNode extends ColorableNodeWithMethodsInfo implements INamedNod
         StringBuilder renamedAttributes = new StringBuilder();
         Pattern pattern = Pattern.compile(".*:\\s*(" + oldValue + ")\\s*$");
 
-        String separator = "";
-        for(String attribute : attributes) {
+        Iterator<String> iterator = attributes.iterator();
+        while(iterator.hasNext()) {
+            String attribute = iterator.next();
             StringBuffer attributeToRename = new StringBuffer(attribute);
             Matcher matcher = pattern.matcher(attribute);
             renamedAttributes.append(
-                    separator + (matcher.matches()
+                        (matcher.matches()
                             ? attributeToRename.replace(matcher.start(1), matcher.end(1), newValue)
                             : attribute)
             );
-            separator = "\n";
+
+            if(iterator.hasNext()) {
+                renamedAttributes.append("\n");
+            }
         }
 
         return renamedAttributes.toString();

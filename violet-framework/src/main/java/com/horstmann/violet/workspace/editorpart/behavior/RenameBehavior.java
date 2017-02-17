@@ -60,8 +60,6 @@ public class RenameBehavior extends AbstractEditorPartBehavior {
     }
 
     private String oldName="";
-
     private String newName="";
-
     private IGraph graph;
 }

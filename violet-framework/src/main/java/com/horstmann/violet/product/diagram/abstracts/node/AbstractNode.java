@@ -276,7 +276,7 @@ public abstract class AbstractNode implements INode
     /**
      * Returns a point, where given edges are connected
      * @param edge
-     * @return
+     * @return point of edges connecting
      */
     public Point2D getConnectionPoint(IEdge edge)
     {

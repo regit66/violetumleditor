@@ -126,7 +126,7 @@ public class ColorableNodeWithMethodsInfo extends ColorableNode implements IRena
     };
 
     protected MultiLineText attributes;
-    private static final String STATIC = "<<static>>";
+    private static final String STATIC = "«static»";
     private static final String[][] SIGNATURE_REPLACE_KEYS = {
             { "public ", "+ " },
             { "package ", "~ " },

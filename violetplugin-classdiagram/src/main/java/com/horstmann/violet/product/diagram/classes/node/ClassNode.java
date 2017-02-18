@@ -272,7 +272,7 @@ public class ClassNode extends ColorableNode implements INamedNode, IRevertableP
 
     private static final int MIN_NAME_HEIGHT = 45;
     private static final int MIN_WIDTH = 100;
-	private boolean VISIBLE_METHODS_AND_ATRIBUTES = true;
+    private boolean VISIBLE_METHODS_AND_ATRIBUTES = true;
     private static final String STATIC = "\u00ABstatic\u00BB";
     private static final String ABSTRACT = "\u00ABabstract\u00BB";
     private static final String HIDE= "hide ";

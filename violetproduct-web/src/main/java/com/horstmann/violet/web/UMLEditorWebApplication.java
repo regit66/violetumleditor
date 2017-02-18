@@ -58,14 +58,14 @@ public class UMLEditorWebApplication extends WApplication {
 
 	/**
 	 * Default constructor
-	 * 
+	 *
 	 * @param filesToOpen
 	 * @throws IOException
 	 */
 	public UMLEditorWebApplication(WEnvironment env) throws IOException {
 		super(env);
 		createDefaultWorkspace();
-		
+
 	}
 
 	private void createDefaultWorkspace() throws IOException {
@@ -81,7 +81,7 @@ public class UMLEditorWebApplication extends WApplication {
 				inputStream.close();
 				outputStream.close();
 			}
-			
+
 		}));
 		//URL resource = getClass().getResource("test.class.violet.html");
 		//IFile aFile = new LocalFile(new File(resource.getFile()));
@@ -96,7 +96,7 @@ public class UMLEditorWebApplication extends WApplication {
 		root.setStyleClass("root");
 		root.addWidget(workspaceWidget);
 		root.mouseMoved().setBlocked(true);
-		
+
 	}
 
 }

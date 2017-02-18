@@ -3,10 +3,7 @@ package com.horstmann.violet.product.diagram.common.node;
 import com.horstmann.violet.product.diagram.abstracts.node.IRenameableNode;
 import com.horstmann.violet.product.diagram.property.text.LineText;
 import com.horstmann.violet.product.diagram.property.text.MultiLineText;
-import com.horstmann.violet.product.diagram.property.text.decorator.OneLineText;
-import com.horstmann.violet.product.diagram.property.text.decorator.RemoveSentenceDecorator;
-import com.horstmann.violet.product.diagram.property.text.decorator.ReplaceSentenceDecorator;
-import com.horstmann.violet.product.diagram.property.text.decorator.UnderlineDecorator;
+import com.horstmann.violet.product.diagram.property.text.decorator.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -112,6 +109,11 @@ public class ColorableNodeWithMethodsInfo extends ColorableNode implements IRena
         {
             OneLineText lineString = new OneLineText(text);
 
+            if(lineString.contains(HIDE))
+            {
+                lineString = new HideDecorator(lineString);
+            }
+
             if(lineString.contains(STATIC))
             {
                 lineString = new UnderlineDecorator(new RemoveSentenceDecorator(lineString, STATIC));
@@ -127,6 +129,7 @@ public class ColorableNodeWithMethodsInfo extends ColorableNode implements IRena
 
     protected MultiLineText attributes;
     private static final String STATIC = "«static»";
+    protected static final String HIDE= "hide ";
     private static final String[][] SIGNATURE_REPLACE_KEYS = {
             { "public ", "+ " },
             { "package ", "~ " },

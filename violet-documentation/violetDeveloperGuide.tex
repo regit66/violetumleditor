@@ -74,9 +74,10 @@ Congratulations! You now have working binaries of VioletUML.
 On how to enable or disable modules see above previous
 The "exe" module in violetUML require additional 32bit libraries:
 
-- lib32z1
-- lib32curses
-- lib-ncurses5
+- lib32z1\newline
+- lib32curses\newline
+- lib-ncurses5\newline
+
 
 \subsection{Code style}
 
@@ -99,10 +100,10 @@ public class SomeClass {
 \end{lstlisting}
 
 As you can see. Camel back names are prefered. Only exceptions should be taken into consideration with very verbose names (which sometimes
-can't be avoided) e.g. this\_is\_very\_verbose\_yet\_descriptive\_name. Like for example methods in Selenium framework.
-- Two spaces are used as intend inside classes/methods.
-- Opening bracket should be in the same line as class/method name.
-- Class names should start with capital leter but methods and variables should start with lowercase.
+can't be avoided) e.g. this\_is\_very\_verbose\_yet\_descriptive\_name. Like for example methods in Selenium framework.\newline
+- Two spaces are used as intend inside classes/methods.\newline
+- Opening bracket should be in the same line as class/method name.\newline
+- Class names should start with capital leter but methods and variables should start with lowercase.\newline
 
 \begin{lstlisting}
  ...
@@ -119,11 +120,11 @@ can't be avoided) e.g. this\_is\_very\_verbose\_yet\_descriptive\_name. Like for
  ...
 \end{lstlisting}
 
-Inside methods two space rule still applies.
-- declarations of obiects should have one line before some more complex logic apear.
-- loops operate on the same rule as methods.
-- control flow (if, else, else if) should have braces begining within new line.
-- multiple comparitions should be within additional paranthasis for readability sake.
+Inside methods two space rule still applies.\newline
+- declarations of obiects should have one line before some more complex logic apear.\newline
+- loops operate on the same rule as methods.\newline
+- control flow (if, else, else if) should have braces begining within new line.\newline
+- multiple comparitions should be within additional paranthasis for readability sake.\newline
 
 \subsection{Violet UI}
 
@@ -134,12 +135,12 @@ On the left there are diagram specific tools (violetplugin-*)
 
 \subsection{Folder structure}
 
-violet-framework/ is the core structure of this application. You can find here :
-- bean injection framework (which is used for loading plugins)
-- graphics which is responsible for front end part of the application like overall layout.
-- plugin loader
-- swingextention that consists mostly of definitions for basic UI elements
-- theme is responsible for holding information about layout colors
+violet-framework/ is the core structure of this application. You can find here :\newline\newline
+- bean injection framework (which is used for loading plugins)\newline
+- graphics which is responsible for front end part of the application like overall layout.\newline
+- plugin loader\newline
+- swingextention that consists mostly of definitions for basic UI elements\newline
+- theme is responsible for holding information about layout colors\newline
 
 violetplugin-*/ those folders beginning with violet and followed with plugin means certain functionality
 package. e.g. activitydiagram holds logic responsible for everything related to activity diagram.
@@ -161,19 +162,33 @@ Although it might be very difficult to accomplish.
 
 Changes from 02.2017 :
 
-- overall refactoring and small code quality improvements
-- created this documentation
-- added common relation edge
-- added safe delete
-- added possibility of using html tags
-- added full screen capabilities
-- added shortcuts that waren't previusly defined
-- added integration with google drive                        \#958eedc
-- added search functionality                                 \#983df43
-- added history panel
-- added dragging capability to workspace                     \#8896f34
-- added detection of duplicate names                         \#0236666
-- fixed copy & cut behavior                                  \#838d94e
+- overall refactoring and small code quality improvements \newline
+- created this documentation\newline
+- added common relation edge\newline
+- added safe delete\newline
+- added possibility of using html tags\newline
+- added full screen capabilities\newline
+- added shortcuts that waren't previusly defined\newline
+- added integration with google drive                        \#958eedc\newline
+- added search functionality                                 \#983df43\newline
+- added history panel\newline
+- added dragging capability to workspace                     \#8896f34\newline
+- added detection of duplicate names                         \#0236666\newline
+- fixed copy \& cut behavior                                  \#838d94e\newline
 
+
+\subsection{Special Thanks}
+I would like to say thank you for people who helped immensely with making those changes possible.
+
+Special thanks go to : \newline\newline
+@NdV66 for help with merging pull requests, code review and releasing final stable version of this software.\newline
+@orchowski for help with merging pull requests and code reviews.\newline
+@KrystianDziedziola for help with integration.\newline
+@bartoszsledz for testing and bug raporting.\newline
+\newline
+And last but not least\newline
+@abizukojc for help with people managment, merging pull requests, preparing release, code review and bug fixing.\newline
+\newline
+Thank you for helping me not to lose all of my sanity.\newline
 
 \end{document}

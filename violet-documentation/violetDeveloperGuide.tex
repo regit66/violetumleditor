@@ -7,22 +7,22 @@
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
  
-\lstdefinestyle{mystyle}{
+\lstdefinestyle{CodeStyle}{
     backgroundcolor=\color{backcolour},   
     commentstyle=\color{codegreen},
     keywordstyle=\color{magenta},
     numberstyle=\tiny\color{codegray},
     stringstyle=\color{codepurple},
     basicstyle=\footnotesize,
-    breakatwhitespace=false,         
-    breaklines=true,                 
-    captionpos=b,                    
-    keepspaces=true,                 
-    numbers=left,                    
-    numbersep=5pt,                  
-    showspaces=false,                
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
     showstringspaces=false,
-    showtabs=false,                  
+    showtabs=false,
     tabsize=2
 }
 
@@ -68,6 +68,62 @@ For now you should be able to run maven clean build.
 Maven should finish building with no errors.
 
 Congratulations! You now have working binaries of VioletUML.
+
+\subsection{Building exe module}
+
+On how to enable or disable modules see above previous
+The "exe" module in violetUML require additional 32bit libraries:
+
+- lib32z1
+- lib32curses
+- lib-ncurses5
+
+\subsection{Code style}
+
+Whole project is written in certain code style convention, we appritiate keeping it unified for readability sake.
+
+Classes and methods :
+\begin{lstlisting}
+public class SomeClass {
+
+    private String somePrivateString;
+
+    public SomeClass() {
+      //some content
+    }
+
+    public void someMethod(int someIntager) {
+      //some content
+    }
+}
+\end{lstlisting}
+
+As you can see. Camel back names are prefered. Only exceptions should be taken into consideration with very verbose names (which sometimes
+can't be avoided) e.g. this_is_very_verbose_yet_descriptive_name. Like for example methods in Selenium framework.
+- Two spaces are used as intend inside classes/methods.
+- Opening bracket should be in the same line as class/method name.
+- Class names should start with capital leter but methods and variables should start with lowercase.
+
+\begin{lstlisting}
+ ...
+  SomeClass someClassVar = new SomeClass();
+  
+  for(SomeOtherClass iterateVar : someClassVar.getAll()) {
+    iterateVar.doSomething();
+    if((iterateVar.getSmth() == 0) && (iterateVar.check() < 1))
+    {
+      //do something
+    }
+  }
+  
+ ...
+\end{lstlisting}
+
+Inside methods two space rule still applies.
+- declarations of obiects should have one line before some more complex logic apear.
+- loops operate on the same rule as methods.
+- control flow (if, else, else if) should have braces begining within new line.
+- multiple comparitions should be within additional paranthasis for readability sake.
 
 \subsection{Violet UI}
 

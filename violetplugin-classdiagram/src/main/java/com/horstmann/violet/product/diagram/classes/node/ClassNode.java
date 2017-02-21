@@ -319,7 +319,6 @@ public class ClassNode extends ColorableNodeWithMethodsInfo implements INamedNod
     private boolean VISIBLE_METHODS_AND_ATRIBUTES = true;
     private static final String STATIC = "\u00ABstatic\u00BB";
     private static final String ABSTRACT = "\u00ABabstract\u00BB";
-    private static final String ABSTRACT = "«abstract»";
     private static final String HIDE= "hide ";
 
     private static final String[][] SIGNATURE_REPLACE_KEYS = {

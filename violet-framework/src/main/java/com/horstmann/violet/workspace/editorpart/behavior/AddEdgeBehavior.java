@@ -18,6 +18,7 @@ import com.horstmann.violet.workspace.editorpart.IEditorPartBehaviorManager;
 import com.horstmann.violet.workspace.editorpart.IEditorPartSelectionHandler;
 import com.horstmann.violet.workspace.sidebar.graphtools.GraphTool;
 import com.horstmann.violet.workspace.sidebar.graphtools.IGraphToolsBar;
+import static com.horstmann.violet.workspace.sidebar.historypanel.HistoryPanel.addEvent;
 
 public class AddEdgeBehavior extends AbstractEditorPartBehavior
 {
@@ -230,6 +231,7 @@ public class AddEdgeBehavior extends AbstractEditorPartBehavior
             finally
             {
                 this.behaviorManager.fireAfterAddingEdgeAtPoints(newEdge, startPoint, endPoint);
+                addEvent(ADD_ASSOCIATION);
             }
         }
         return isAdded;
@@ -282,5 +284,7 @@ public class AddEdgeBehavior extends AbstractEditorPartBehavior
     private List<Point2D> transitionPoints = new ArrayList<Point2D>();
 
     private IEdge newEdge = null;
+
+    private final String ADD_ASSOCIATION="Add association";
 
 }

@@ -35,6 +35,7 @@ import com.horstmann.violet.workspace.sidebar.editortools.EditorToolsPanel;
 import com.horstmann.violet.workspace.sidebar.graphtools.GraphToolsBar;
 import com.horstmann.violet.workspace.sidebar.graphtools.IGraphToolsBar;
 import com.horstmann.violet.workspace.sidebar.optionaltools.OptionalToolsPanel;
+import com.horstmann.violet.workspace.sidebar.historypanel.HistoryPanel;
 
 public class SideBar extends JPanel implements ISideBar
 {
@@ -113,6 +114,15 @@ public class SideBar extends JPanel implements ISideBar
         }
         return this.alignedBar;
     }
+    protected ISideBarElement getHistoryPanel()
+    {
+        if (this.historyPanel == null)
+        {
+            this.historyPanel = new HistoryPanel();
+            this.historyPanel.install(this.diagramPanel);
+        }
+        return this.historyPanel;
+    }
 
     protected Map<ISideBarElement, String> getExternalContributionElements()
     {
@@ -135,6 +145,7 @@ public class SideBar extends JPanel implements ISideBar
     private ISideBarElement optionalToolsBar;
     private IColorChoiceBar colorChoiceBar;
     private ISideBarElement alignedBar;
+    private ISideBarElement historyPanel;
     private Map<ISideBarElement, String> externalContributionElements = new HashMap<ISideBarElement, String>();
 
 }

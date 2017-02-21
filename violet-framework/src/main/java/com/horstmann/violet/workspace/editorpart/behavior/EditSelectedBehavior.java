@@ -23,7 +23,7 @@ import com.horstmann.violet.product.diagram.propertyeditor.ICustomPropertyEditor
 import com.horstmann.violet.workspace.editorpart.IEditorPart;
 import com.horstmann.violet.workspace.editorpart.IEditorPartBehaviorManager;
 import com.horstmann.violet.workspace.editorpart.IEditorPartSelectionHandler;
-
+import static com.horstmann.violet.workspace.sidebar.historypanel.HistoryPanel.addEvent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -181,6 +181,7 @@ public class EditSelectedBehavior extends AbstractEditorPartBehavior
                         editorPart.getSwingComponent().invalidate();
 
 
+
                         if (edited instanceof IRevertableProperties)
                         {
                             if(event.getNewValue().equals(JOptionPane.CANCEL_OPTION))
@@ -188,7 +189,6 @@ public class EditSelectedBehavior extends AbstractEditorPartBehavior
                                 ((IRevertableProperties)edited).revertUpdate();
                             }
                         }
-
                     }
                 }
             }
@@ -197,6 +197,7 @@ public class EditSelectedBehavior extends AbstractEditorPartBehavior
                 return eventValue != null && eventValue != JOptionPane.UNINITIALIZED_VALUE;
             }
         });
+        addEvent(editItem);
         return optionPane;
     }
 
@@ -237,4 +238,6 @@ public class EditSelectedBehavior extends AbstractEditorPartBehavior
 
     @ResourceBundleBean(key = "edit.properties.empty_bean_message")
     private String uneditableBeanMessage;
+    @ResourceBundleBean(key = "edit.properties.edit_item")
+    private String editItem;
 }

@@ -34,6 +34,8 @@ public class WorkspacePanel extends JPanel
         add(scrollSideBarPanel, BorderLayout.WEST);
 //        JScrollPane scrollStatusBarPanel = getScrollableStatusBar();
 //        add(scrollStatusBarPanel, BorderLayout.SOUTH);
+        JScrollPane scrollHistoryPart= getScrollableHistoryPart();
+        add(scrollHistoryPart, BorderLayout.WEST);
         refreshDisplay();
     }
 
@@ -108,6 +110,21 @@ public class WorkspacePanel extends JPanel
         }
         return this.scrollableSideBar;
     }
+    public JScrollPane getScrollableHistoryPart()
+    {
+        if (this.scrollableHistoryPart == null)
+        {
+            ISideBar sideBar = this.workspace.getSideBar();
+            this.scrollableSideBar = new JScrollPane(sideBar.getAWTComponent());
+            this.scrollableSideBar.setAlignmentY(Component.TOP_ALIGNMENT);
+            this.scrollableSideBar.getHorizontalScrollBar().setUI(new TinyScrollBarUI());
+            this.scrollableSideBar.getVerticalScrollBar().setUI(new TinyScrollBarUI());
+            this.scrollableSideBar.setBorder(new EmptyBorder(0, 0, 0, 0));
+            this.scrollableSideBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+            this.scrollableSideBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        }
+        return this.scrollableSideBar;
+    }
 
 
 
@@ -130,6 +147,7 @@ public class WorkspacePanel extends JPanel
     private JScrollPane scrollableSideBar;
     private JScrollPane scrollableEditorPart;
     private JScrollPane scrollableStatusBar;
+    private JScrollPane scrollableHistoryPart;
 
 
 }

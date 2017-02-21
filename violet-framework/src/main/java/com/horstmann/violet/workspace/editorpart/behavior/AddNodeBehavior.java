@@ -14,7 +14,7 @@ import com.horstmann.violet.workspace.editorpart.IEditorPartSelectionHandler;
 import com.horstmann.violet.workspace.sidebar.graphtools.GraphTool;
 import com.horstmann.violet.workspace.sidebar.graphtools.IGraphToolsBar;
 import com.horstmann.violet.workspace.sidebar.graphtools.IGraphToolsBarMouseListener;
-
+import static com.horstmann.violet.workspace.sidebar.historypanel.HistoryPanel.addEvent;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -27,6 +27,7 @@ public class AddNodeBehavior extends AbstractEditorPartBehavior implements IGrap
 {
     @ResourceBundleBean(key = "edit.properties.empty_message")
     private String message;
+    private final String ADD_ITEM="Add item";
 
     public AddNodeBehavior(IEditorPart editorPart, IGraphToolsBar graphToolsBar)
     {
@@ -203,7 +204,7 @@ public class AddNodeBehavior extends AbstractEditorPartBehavior implements IGrap
             {
                 moveDraggedNode(outEvent);
             }
-
+            addEvent(ADD_ITEM);
             this.draggedNode = null;
         }
     }

@@ -16,6 +16,7 @@ import com.horstmann.violet.workspace.editorpart.IEditorPartSelectionHandler;
 import com.horstmann.violet.workspace.sidebar.graphtools.GraphTool;
 import com.horstmann.violet.workspace.sidebar.graphtools.IGraphToolsBar;
 
+
 public class DragSelectedBehavior extends AbstractEditorPartBehavior {
 
     public DragSelectedBehavior(IEditorPart editorPart, IGraphToolsBar graphToolsBar) {
@@ -180,7 +181,6 @@ public class DragSelectedBehavior extends AbstractEditorPartBehavior {
     private Cursor initialCursor = null;
 
     private Cursor dragCursor = new Cursor(Cursor.HAND_CURSOR);
-
 
     private static volatile boolean isLocked = false;
 }

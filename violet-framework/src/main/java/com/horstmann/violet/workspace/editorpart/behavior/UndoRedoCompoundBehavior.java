@@ -13,7 +13,8 @@ import com.horstmann.violet.product.diagram.abstracts.IColorable;
 import com.horstmann.violet.product.diagram.abstracts.edge.IEdge;
 import com.horstmann.violet.product.diagram.abstracts.node.INode;
 import com.horstmann.violet.workspace.editorpart.IEditorPart;
-
+import static com.horstmann.violet.workspace.sidebar.historypanel.HistoryPanel.redoEvent;
+import static com.horstmann.violet.workspace.sidebar.historypanel.HistoryPanel.removeEvent;
 /**
  * This behavior for undo/redo actions is composed of sub-behaviors
  * 
@@ -229,6 +230,7 @@ public class UndoRedoCompoundBehavior extends AbstractEditorPartBehavior
             undoManager.undo();
             editorPart.getSwingComponent().invalidate();
             editorPart.getSwingComponent().repaint();
+            removeEvent();
         }
     }
 
@@ -242,6 +244,7 @@ public class UndoRedoCompoundBehavior extends AbstractEditorPartBehavior
             undoManager.redo();
             editorPart.getSwingComponent().invalidate();
             editorPart.getSwingComponent().repaint();
+            redoEvent();
         }
     }
 

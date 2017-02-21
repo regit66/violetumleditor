@@ -15,7 +15,7 @@ import com.horstmann.violet.product.diagram.abstracts.node.INode;
 import com.horstmann.violet.workspace.editorpart.IEditorPart;
 import com.horstmann.violet.workspace.editorpart.IEditorPartBehaviorManager;
 import com.horstmann.violet.workspace.editorpart.IEditorPartSelectionHandler;
-
+import static com.horstmann.violet.workspace.sidebar.historypanel.HistoryPanel.addEvent;
 import javax.swing.undo.*;
 import java.awt.*;
 import java.awt.datatransfer.*;
@@ -57,6 +57,12 @@ public class CutCopyPasteBehavior extends AbstractEditorPartBehavior
      */
     @ResourceBundleBean(key = "edit.properties.empty_message")
     private String message;
+
+    @ResourceBundleBean(key = "edit.properties.cut_item")
+    private String cutItem;
+
+    @ResourceBundleBean(key = "edit.properties.paste_item")
+    private String pasteItem;
     
     public CutCopyPasteBehavior(IEditorPart editorPart)
     {
@@ -81,6 +87,7 @@ public class CutCopyPasteBehavior extends AbstractEditorPartBehavior
         editorPart.removeSelected();
         editorPart.getSwingComponent().invalidate();
         editorPart.getSwingComponent().repaint();
+        addEvent(cutItem);
     }
 
     /**
@@ -193,6 +200,7 @@ public class CutCopyPasteBehavior extends AbstractEditorPartBehavior
 
             editorPart.getSwingComponent().invalidate();
             editorPart.getSwingComponent().repaint();
+            addEvent(pasteItem);
 
             validatePaste(nodes, graph);
         }

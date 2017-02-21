@@ -13,7 +13,7 @@ import com.horstmann.violet.workspace.editorpart.IEditorPartBehaviorManager;
 import com.horstmann.violet.workspace.sidebar.colortools.ColorChoice;
 import com.horstmann.violet.workspace.sidebar.colortools.IColorChoiceBar;
 import com.horstmann.violet.workspace.sidebar.colortools.IColorChoiceChangeListener;
-
+import static com.horstmann.violet.workspace.sidebar.historypanel.HistoryPanel.addEvent;
 public class ColorizeBehavior extends AbstractEditorPartBehavior
 {
     /**
@@ -102,6 +102,7 @@ public class ColorizeBehavior extends AbstractEditorPartBehavior
 
             this.currentColorChoice = null;
             this.colorChoiceBar.resetSelection();
+            addEvent(COLORIZE_ITEM);
             return;
         }
     }
@@ -159,4 +160,5 @@ public class ColorizeBehavior extends AbstractEditorPartBehavior
     private IColorable latestChosenEdge = null;
     private Color latestChosenEdgeColor = null;
     private Color backlightColor = Color.BLUE;
+    private final String COLORIZE_ITEM="Colorize item";
 }

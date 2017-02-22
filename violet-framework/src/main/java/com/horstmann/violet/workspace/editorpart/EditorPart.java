@@ -302,6 +302,8 @@ public class EditorPart extends JPanel implements IEditorPart
 				visibleNode.switchVisible();
 			}
 		}
+		this.getSwingComponent().invalidate();
+		this.updateUI();
 	}
 	
     /* (non-Javadoc)
